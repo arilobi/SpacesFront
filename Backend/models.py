@@ -118,7 +118,7 @@ class Payment(db.Model):
 
 
 class TokenBlockList(db.Model):
-    __tablename__ = 'token_blocklist'  #! ✅ Ensured table name is correct
+    __tablename__ = 'token_blocklist'  #!  Ensured table name is correct
 
     id = db.Column(db.Integer, primary_key=True)
     jti = db.Column(db.String(36), nullable=False, unique=True)  #! JWT ID (jti)
