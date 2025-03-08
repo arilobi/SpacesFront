@@ -9,7 +9,7 @@ booking_bp = Blueprint("booking_bp", __name__)
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
-#! ✅ CREATE BOOKING FIRST, THEN INITIATE PAYMENT
+#!  CREATE BOOKING FIRST, THEN INITIATE PAYMENT
 @booking_bp.route("/bookings", methods=['POST'])
 def create_booking():
     data = request.get_json()
@@ -18,7 +18,7 @@ def create_booking():
     if not all(field in data for field in required_fields):
         return jsonify({"error": "Missing required fields"}), 400
 
-    # ✅ Ensure space is still available
+    #  Ensure space is still available
     space = Space.query.get(data["space_id"])
     if not space:
         return jsonify({"error": "Space not found"}), 404
@@ -26,21 +26,21 @@ def create_booking():
     if space.availability is False:
         return jsonify({"error": "Space is already booked"}), 400
 
-    # ✅ Convert start_time and end_time to datetime objects
+    # Convert start_time and end_time to datetime objects
     try:
-        start_time = datetime.fromisoformat(data["start_time"])  # Converts ISO 8601 string to datetime
-        end_time = datetime.fromisoformat(data["end_time"])  # Converts ISO 8601 string to datetime
+        start_time = datetime.fromisoformat(data["start_time"])  
+        end_time = datetime.fromisoformat(data["end_time"]) 
     except ValueError as e:
         return jsonify({"error": f"Invalid date format. Expected format is 'YYYY-MM-DDTHH:MM:SS'. Error: {e}"}), 400
 
-    # ✅ Create a new booking
+    # Create a new booking
     new_booking = Booking(
         user_id=data["user_id"],
         space_id=data["space_id"],
         start_time=start_time,
         end_time=end_time,
         total_amount=data["total_amount"],
-        status="Pending Payment"  # ✅ Only becomes "Booked" after payment
+        status="Pending Payment"  
     )
 
     db.session.add(new_booking)
@@ -48,24 +48,7 @@ def create_booking():
 
     return jsonify({"message": "Booking created successfully. Proceed to payment.", "booking_id": new_booking.id}), 201
 
-
-# @booking_bp.route("/bookings", methods=['GET'])
-# @jwt_required()  # Ensure the user is authenticated
-# def fetch_user_bookings():
-#     try:
-#         current_user_id = get_jwt_identity()  # Get the user ID from the token
-
-#         bookings = Booking.query.filter_by(user_id=current_user_id).all()  # Filter bookings by user
-
-#         bookings_list = [booking.to_dict() for booking in bookings]
-
-#         return jsonify(bookings_list), 200
-    
-#     except Exception as e:
-#         logging.error(f"🚨 Error fetching bookings for user {current_user_id}: {e}")
-#         return jsonify({"error": "An error occurred while fetching your bookings"}), 500
-
-#! ✅ FETCH ALL BOOKINGS
+#! FETCH ALL BOOKINGS
 @booking_bp.route("/bookings", methods=['GET'])
 def fetch_all_bookings():
     try:
@@ -98,13 +81,13 @@ def fetch_user_bookings():
         bookings_list = []
         for booking in bookings:
             # Get user and space details for each booking
-            user = User.query.get(booking.user_id)  # Assuming User is the model for users
-            space = Space.query.get(booking.space_id)  # Assuming Space is the model for spaces
+            user = User.query.get(booking.user_id) 
+            space = Space.query.get(booking.space_id)  
 
             # Prepare the booking dictionary
             booking_dict = booking.to_dict()
 
-            # Add user name and space name to the dictionary
+            
             booking_dict['user_name'] = user.name if user else "No name available"
             booking_dict['space_name'] = space.name if space else "No space name available"
 
@@ -116,7 +99,7 @@ def fetch_user_bookings():
         logging.error(f"🚨 Error fetching bookings for user {current_user_id}: {e}")
         return jsonify({"error": "An error occurred while fetching your bookings"}), 500
     
-#! ✅ FETCH SINGLE BOOKING
+#! FETCH SINGLE BOOKING
 @booking_bp.route("/bookings/<int:booking_id>", methods=['GET'])
 def get_booking(booking_id):
     try:
@@ -130,7 +113,7 @@ def get_booking(booking_id):
         # Convert the booking to a dictionary using the to_dict method
         booking_dict = booking.to_dict()
         
-        # Return the booking details as a JSON response
+        
         return jsonify(booking_dict), 200
     
     except Exception as e:
@@ -141,7 +124,7 @@ def get_booking(booking_id):
         return jsonify({"error": "An error occurred while fetching the booking"}), 500
 
 
-#! ✅ UPDATE BOOKING STATUS
+#! UPDATE BOOKING STATUS
 @booking_bp.route("/bookings/<int:booking_id>/status", methods=['PATCH'])
 def update_booking_status(booking_id):
     booking = Booking.query.get(booking_id)
@@ -158,7 +141,7 @@ def update_booking_status(booking_id):
     return jsonify({"message": "Booking status updated successfully"}), 200
 
 
-#! ✅ DELETE BOOKING
+#! DELETE BOOKING
 @booking_bp.route("/bookings/<int:booking_id>", methods=['DELETE'])
 def delete_booking(booking_id):
     booking = Booking.query.get(booking_id)
