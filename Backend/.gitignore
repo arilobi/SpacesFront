@@ -1,0 +1,4 @@
+# echo ".env" >> .gitignore
+# echo "client_secret.json" >> .gitignore
+# git rm --cached .env client_secret.json
+# .env
