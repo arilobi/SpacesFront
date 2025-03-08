@@ -7,7 +7,7 @@ space_bp = Blueprint("space_bp", __name__)
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-#! ✅ CREATE SPACE (Default Availability: True)
+#!  CREATE SPACE (Default Availability: True)
 @space_bp.route("/spaces", methods=['POST'])
 def create_space():
     data = request.get_json()
@@ -31,13 +31,13 @@ def create_space():
 
     return jsonify(new_space.to_dict()), 201
 
-#! ✅ FETCH ALL SPACES
+#!  FETCH ALL SPACES
 # @space_bp.route("/spaces", methods=["GET"])
 # def get_all_spaces():
 #     try:
 #         spaces = Space.query.all()
 #         if not spaces:
-#             logger.warning("⚠️ No spaces found in the database.")
+#             logger.warning("⚠ No spaces found in the database.")
 #             return jsonify({"message": "No spaces available."}), 200
 
 #         spaces_list = [
@@ -56,10 +56,10 @@ def create_space():
 #         return jsonify({"spaces": spaces_list}), 200
 
 #     except Exception as e:
-#         logger.error(f"🚨 Error fetching spaces: {e}", exc_info=True)
+#         logger.error(f" Error fetching spaces: {e}", exc_info=True)
 #         return jsonify({"error": "Internal Server Error", "details": str(e)}), 500
 
-#! ✅ FETCH ALL SPACES
+#!  FETCH ALL SPACES
 @space_bp.route("/spaces", methods=['GET'])
 def get_all_spaces():
     spaces = Space.query.all()
@@ -77,7 +77,7 @@ def get_all_spaces():
 
     return jsonify({"spaces": spaces_list}), 200
     
-#! ✅ FETCH SINGLE SPACE (With Booking Details)
+#!  FETCH SINGLE SPACE (With Booking Details)
 @space_bp.route("/spaces/<int:space_id>", methods=['GET'])
 def get_space(space_id):
     space = Space.query.get(space_id)
@@ -85,7 +85,7 @@ def get_space(space_id):
         return jsonify({"error": "Space not found"}), 404
     return jsonify(space.to_dict()), 200
 
-#! ✅ UPDATE SPACE DETAILS
+#!  UPDATE SPACE DETAILS
 @space_bp.route("/spaces/<int:space_id>", methods=['PATCH'])
 def update_space(space_id):
     space = Space.query.get(space_id)
@@ -100,7 +100,7 @@ def update_space(space_id):
     db.session.commit()
     return jsonify({"message": "Space updated successfully"}), 200
 
-#! ✅ UPDATE SPACE AVAILABILITY
+#!  UPDATE SPACE AVAILABILITY
 @space_bp.route("/spaces/<int:space_id>/availability", methods=['PATCH'])
 def update_space_availability(space_id):
     space = Space.query.get(space_id)
@@ -128,7 +128,7 @@ def update_space_availability(space_id):
         "message": f"Space status updated to {'Available' if space.availability else 'Booked'}"
     }), 200
 
-# #! ✅ DELETE SPACE (Ensure No Active Bookings Exist)
+# #!  DELETE SPACE (Ensure No Active Bookings Exist)
 # @space_bp.route("/spaces/<int:space_id>", methods=['DELETE'])
 # def delete_space(space_id):
 #     space = Space.query.get(space_id)
