@@ -1,6 +1,0 @@
-[submodule "Space-Backend"]
-	path = Space-Backend
-	url = git@github.com:CharlesNJoroge8822/Space-Backend.git
-[submodule "Space-Frontend"]
-	path = Space-Frontend
-	url = git@github.com:CharlesNJoroge8822/Space-Frontend.git
