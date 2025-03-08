@@ -1,0 +1,281 @@
+/* Global Styles */
+body {
+    background-color: #F1EDE5;
+    color: black;
+    margin: 0;
+    padding: 0;
+    font-family: 'Red Hat Display', sans-serif;
+}
+
+/* Centered Container */
+.container-center {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+    background: #F1EDE5;
+}
+
+/* Typography */
+.title {
+    text-align: center;
+    font-size: 45px;
+    color: #104436;
+    font-family: 'Inria Serif', serif;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.text-muted {
+    color: #6c757d;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.text-error {
+    color: #e74c3c;
+    font-size: 1rem;
+    text-align: center;
+}
+
+/* 🔹 GRID LAYOUT */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    background-color: #F1EDE5;
+}
+
+/* 🔥 CARDS */
+.card {
+    background: #F1EDE5;
+    border-style: solid;
+    border-color: #104436;
+    border-bottom: 10px solid #104436;
+    border-right: 9px solid #104436;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: 'Red Hat Display', sans-serif;
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #104436;
+    margin-bottom: 10px;
+    font-family: 'Inria Serif', serif;
+}
+
+.card-text {
+    font-size: 0.95rem;
+    color: black;
+    flex: 1;
+}
+
+.card-details {
+    font-size: 0.9rem;
+    color: black;
+}
+
+/* 🔴 BUTTONS */
+.btn {
+    display: inline-block;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2980b9, #2471a3);
+    transform: scale(1.05);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #27ae60, #219653);
+    color: white;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #219653, #1e8449);
+}
+
+/* ⚡ MODAL STYLES */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: #F1EDE5;
+    border-radius: 10px;
+    padding: 24px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 70vh;
+    border-style: solid;
+    border-color: #104436;
+    border-width: 5px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Red Hat Display', sans-serif;
+}
+
+.modal h5 {
+    font-size: 30px;
+    font-family: 'Inria Serif', serif;
+    color: #104436;
+}
+
+.modal p {
+    color: black;
+}
+
+.label-modal {
+    display: flex;
+    gap: 200px;
+    color: black;
+}
+
+.modal-label {
+    display: flex;
+    gap: 50px;
+}
+
+.modal-label input {
+    font-size: 16px;
+    border-color: #104436;
+    border-width: 3px;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.modal-label select {
+    background-color: #F1EDE5;
+    font-family: 'Red Hat Display', sans-serif;
+    width: 100%;
+    border-radius: 20px;
+    padding-left: 15px;
+    font-size: 16px;
+    border-color: #104436;
+    border-width: 3px;
+    padding: 8px;
+}
+
+.modal label {
+    font-family: 'Inria Serif', serif;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-green {
+    background-color: #104436;
+    color: white;
+    font-family: 'Inria Serif', serif;
+    width: 90%;
+    border-radius: 20px;
+    padding: 20px;
+    font-size: 16px;
+    margin-top: 30px;
+    margin-bottom: 55px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-green:hover {
+    background-color: #256a57;
+    color: white;
+    text-decoration: none;
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Animation for Modal */
+@keyframes fadeIn {
+    from {
+        transform: translateY(-15px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Modal Close Button */
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #7f8c8d;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    color: #e74c3c;
+}
+
+/* ⏳ LOADER */
+.loading-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
