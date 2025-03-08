@@ -18,7 +18,7 @@ The Client can:
   
 - Book a space on the availabilty.
   
-- Pay for a space via mPesa and receive a message on their phone to confirm their payment before proceeding.
+- Pay for a space.
   
 - View all their bookings including the space details and price of the space.
   
