@@ -182,7 +182,7 @@ def google_callback():
         "role": user.role
     }
 
-    return redirect(f"http://localhost:5173/login")
+    return redirect(f"https://spacesbook.vercel.app/login")
 
 def credentials_to_dict(credentials):
     """Converts credentials to a dictionary."""
