@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 
 limiter = Limiter(
     key_func=get_remote_address,
-    default_limits=["100 per minute"]  # ⬆️ Global limit for all endpoints
+    default_limits=["100 per minute"]  #  Global limit for all endpoints
 )
 
 def init_limiter(app):
@@ -27,10 +27,10 @@ def init_limiter(app):
 def is_admin():
     """Check if the current user is an admin (cached result)."""
     current_user_id = get_jwt_identity()
-    user = db.session.get(User, current_user_id)  # ✅ More efficient query
+    user = db.session.get(User, current_user_id)  #  More efficient query
     return user and user.role.lower() == 'admin'
 
-#! ✅ CREATE USER
+#!  CREATE USER
 @user_bp.route("/users", methods=['POST'])
 def create_user():
     try:
@@ -82,7 +82,7 @@ def create_user():
         }), 201
 
     except Exception as e:
-        logging.error(f"❌ Error creating user: {e}")
+        logging.error(f" Error creating user: {e}")
         return jsonify({"error": str(e)}), 500
 
 # fetch user by ID
@@ -128,15 +128,15 @@ def fetch_user(id):
 
     return jsonify(user_data), 200 
 
-#! ✅ FETCH ALL USERS (Admin Only) with Pagination
+#!  FETCH ALL USERS (Admin Only) with Pagination
 @user_bp.route("/users", methods=['GET'])
-@limiter.limit("50 per minute")  # ✅ Rate limit per user/IP
+@limiter.limit("50 per minute")  #  Rate limit per user/IP
 @jwt_required()
 def fetch_all_users():
     if not is_admin():
         return jsonify({"error": "Only admins can access this resource"}), 403
 
-    # ✅ Prevent too large values for pagination
+    #  Prevent too large values for pagination
     page = request.args.get('page', 1, type=int)
     per_page = min(request.args.get('per_page', 10, type=int), 50)  # ⬇️ Limit max per_page to 50
 
@@ -161,7 +161,7 @@ def fetch_all_users():
         "prev_page": paginated_users.prev_num if paginated_users.has_prev else None
     }), 200
 
-#! ✅ UPDATE USER (Self or Admin Only)
+#!  UPDATE USER (Self or Admin Only)
 @user_bp.route("/users/<int:id>", methods=['PATCH'])  
 def update_user(id):
     try:
@@ -213,10 +213,10 @@ def update_user(id):
         }), 200
 
     except Exception as e:
-        logging.error(f"❌ Error updating user {id}: {e}")
+        logging.error(f" Error updating user {id}: {e}")
         return jsonify({"error": str(e)}), 500
 
-#! ✅ DELETE USER (Admin Only)
+#!  DELETE USER (Admin Only)
 @user_bp.route('/users/<int:user_id>', methods=['DELETE'])
 @jwt_required()
 def delete_user(user_id):
@@ -235,5 +235,5 @@ def delete_user(user_id):
         return jsonify({"message": "User deleted successfully"}), 200
 
     except Exception as e:
-        logging.error(f"❌ Error deleting user {user_id}: {e}")
+        logging.error(f" Error deleting user {user_id}: {e}")
         return jsonify({"error": str(e)}), 500
