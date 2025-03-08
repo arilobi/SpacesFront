@@ -37,7 +37,7 @@ app.secret_key = os.getenv("SECRET_KEY", "supersecretkey")
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"  # Allow HTTP for development
 
 # ✅ Database Configuration
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///rental.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "postgresql://bookspacedb_user:T5dANXCbNb1Spp0ku4SZRJlkaB0WOTX8@dpg-cv6754qn91rc73bcg78g-a.oregon-postgres.render.com/bookspacedb")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # ✅ JWT Configuration
@@ -182,7 +182,7 @@ def google_callback():
         "role": user.role
     }
 
-    return redirect(f"http://localhost:5174/login")
+    return redirect(f"http://localhost:5173/login")
 
 def credentials_to_dict(credentials):
     """Converts credentials to a dictionary."""
