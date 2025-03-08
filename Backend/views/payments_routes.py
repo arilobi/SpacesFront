@@ -31,9 +31,9 @@ def create_payment():
         booking_id=data["booking_id"],
         user_id=data["user_id"],
         amount=data["amount"],
-        mpesa_transaction_id=unique_mpesa_id,  # Use generated id
+        mpesa_transaction_id=unique_mpesa_id, 
         phone_number=data["phone_number"],
-        status=data.get("status", "Processing")  # Default status is processing 
+        status=data.get("status", "Processing")  
     )
 
     db.session.add(new_payment)
@@ -43,42 +43,15 @@ def create_payment():
 
 # Utility function to generate unique transaction ID
 def generate_transaction_id():
-    return str(uuid.uuid4())  # Generate a unique transaction ID
-
-# @payment_bp.route("/stkpush", methods=["POST"])
-# def initiate_stk_push():
-#     data = request.get_json()
-
-#     # Log the incoming payload
-#     print("Received STK Push Payload:", data)
-
-#     # Ensure required fields exist
-#     required_fields = ["phone_number", "amount", "order_id"]
-#     if not all(field in data for field in required_fields):
-#         return jsonify({"error": "Missing required fields"}), 400
-
-#     phone_number = data["phone_number"]
-#     amount = data["amount"]
-#     order_id = data["order_id"]
-
-#     # Generate a unique transaction ID
-#     transaction_id = generate_transaction_id()
-
-#     try:
-#         # Call stk_push function from mpesa_helper.py
-#         response = stk_push(phone_number, amount, order_id)
-#         return jsonify(response), 200
-#     except Exception as e:
-#         print("STK Push Error:", str(e))  # Log the error
-#         return jsonify({"error": str(e)}), 500
+    return str(uuid.uuid4()) 
 
 @payment_bp.route("/stkpush", methods=["POST"])
 def initiate_stk_push():
     data = request.get_json()
-    logger.info("📩 Received STK Push Payload: %s", data)
+    logger.info("Received STK Push Payload: %s", data)
 
     if not data or not all(field in data for field in ["phone_number", "amount", "order_id"]):
-        logger.error("❌ Missing required fields in STK push request")
+        logger.error(" Missing required fields in STK push request")
         return jsonify({"error": "Missing required fields"}), 400
 
     phone_number = data["phone_number"]
@@ -86,21 +59,21 @@ def initiate_stk_push():
     order_id = data["order_id"]
 
     try:
-        # ✅ Call STK Push function
+        #  Call STK Push function
         response = stk_push(phone_number, amount, order_id)
-        logger.info("✅ STK Push Response: %s", response)  # Log full response
+        logger.info(" STK Push Response: %s", response) 
 
-        # ✅ If response is missing transaction ID, return CheckoutRequestID instead
+        #  If response is missing transaction ID, return CheckoutRequestID instead
         if not response or "CheckoutRequestID" not in response:
-            logger.error("❌ STK Push Response missing CheckoutRequestID: %s", response)
+            logger.error(" STK Push Response missing CheckoutRequestID: %s", response)
             return jsonify({"error": "Invalid STK Push response. No CheckoutRequestID received."}), 500
 
         return jsonify({
             "message": "STK Push request sent successfully",
-            "checkout_request_id": response["CheckoutRequestID"]  # ✅ Return CheckoutRequestID
+            "checkout_request_id": response["CheckoutRequestID"]  
         }), 200
     except Exception as e:
-        logger.error("❌ STK Push Error: %s", str(e))
+        logger.error(" STK Push Error: %s", str(e))
         return jsonify({"error": str(e)}), 500
 
 
@@ -142,35 +115,35 @@ def initiate_stk_push():
 #                 phone_number = item.get('Value')
 
 #     # Log successful payment
-#     logger.info(f"✅ Payment successful for order {checkout_request_id}. Amount: {amount}, Phone: {phone_number}")
+#     logger.info(f" Payment successful for order {checkout_request_id}. Amount: {amount}, Phone: {phone_number}")
 
-#     # ✅ Find the payment record using the M-Pesa transaction ID
+#     #  Find the payment record using the M-Pesa transaction ID
 #     payment = Payment.query.filter_by(mpesa_transaction_id=checkout_request_id).first()
 #     if not payment:
-#         logger.error(f"🚨 No payment found with transaction ID {checkout_request_id}")
+#         logger.error(f"No payment found with transaction ID {checkout_request_id}")
 #         return jsonify({"ResultCode": 1, "ResultDesc": "Payment record not found"}), 404
 
-#     # ✅ Update payment status to "Confirmed"
+#     #  Update payment status to "Confirmed"
 #     payment.status = "Confirmed"
 #     db.session.commit()
 
-#     # ✅ Find the associated booking and update its status
+#     #  Find the associated booking and update its status
 #     booking = Booking.query.get(payment.booking_id)
 #     if booking:
 #         booking.status = "Booked"
 #         db.session.commit()
-#         logger.info(f"✅ Booking ID {booking.id} marked as Booked!")
+#         logger.info(f" Booking ID {booking.id} marked as Booked!")
 
-#         # ✅ Find the associated space and update availability
+#         #  Find the associated space and update availability
 #         space = Space.query.get(booking.space_id)
 #         if space:
 #             space.availability = False  # Mark space as unavailable (Booked)
 #             db.session.commit()
-#             logger.info(f"🚀 Space ID {space.id} marked as Booked!")
+#             logger.info(f"Space ID {space.id} marked as Booked!")
 
 #     return jsonify({"ResultCode": 0, "ResultDesc": "Payment received, booking confirmed, and space marked as booked."}), 200
 
-# ! ✅ HANDLE MPESA CALLBACK
+# !  HANDLE MPESA CALLBACK
 @payment_bp.route('/callback', methods=['POST'])
 def handle_callback():
     callback_data = request.json
@@ -200,9 +173,9 @@ def handle_callback():
         logger.error(f"🚨 No MpesaReceiptNumber found in callback for Order {checkout_request_id}")
         return jsonify({"ResultCode": 1, "ResultDesc": "No transaction ID received"}), 400
 
-    logger.info(f"✅ Payment successful. Order {checkout_request_id}, Transaction ID: {transaction_id}")
+    logger.info(f" Payment successful. Order {checkout_request_id}, Transaction ID: {transaction_id}")
 
-    # ✅ Find and update the payment record
+    # Find and update the payment record
     payment = Payment.query.filter_by(mpesa_transaction_id=checkout_request_id).first()
     if not payment:
         logger.error(f"🚨 No payment record found with transaction ID {checkout_request_id}")
@@ -212,15 +185,15 @@ def handle_callback():
     payment.mpesa_transaction_id = transaction_id
     db.session.commit()
 
-    # ✅ Find and update booking & space
+    # Find and update booking & space
     booking = Booking.query.get(payment.booking_id)
     if booking:
-        booking.status = "Booked"  # ✅ Change status after payment
+        booking.status = "Booked"  #  Change status after payment
         db.session.commit()
 
         space = Space.query.get(booking.space_id)
         if space:
-            space.availability = False  # ✅ Mark as booked only after payment
+            space.availability = False  #  Mark as booked only after payment
             db.session.commit()
 
     return jsonify({"ResultCode": 0, "ResultDesc": "Payment received, booking confirmed, and space marked as booked."}), 200
