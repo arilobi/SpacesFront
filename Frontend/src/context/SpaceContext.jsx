@@ -17,7 +17,7 @@ export const SpaceProvider = ({ children }) => {
     const fetchSpaces = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await fetch("http://127.0.0.1:5000/spaces", {
+            const response = await fetch("https://spacesfront.onrender.com/spaces", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
@@ -52,7 +52,7 @@ export const SpaceProvider = ({ children }) => {
 
         const toastId = toast.loading("Creating space...");
         try {
-            const response = await fetch("http://127.0.0.1:5000/spaces", {
+            const response = await fetch("https://spacesfront.onrender.com/spaces", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -86,7 +86,7 @@ export const SpaceProvider = ({ children }) => {
     const updateSpace = async (spaceId, updatedData) => {
         const toastId = toast.loading("Updating space...");
         try {
-            const response = await fetch(`http://127.0.0.1:5000/spaces/${spaceId}`, {
+            const response = await fetch(`https://spacesfront.onrender.com/spaces/${spaceId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -131,7 +131,7 @@ export const SpaceProvider = ({ children }) => {
 
         const toastId = toast.loading("Deleting space...");
         try {
-            const response = await fetch(`http://127.0.0.1:5000/spaces/${spaceId}`, {
+            const response = await fetch(`https://spacesfront.onrender.com/spaces/${spaceId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -167,7 +167,7 @@ export const SpaceProvider = ({ children }) => {
     // Update Space Availability
     const updateSpaceAvailability = async (spaceId, availability) => {
         try {
-            const response = await fetch(`http://127.0.0.1:5000/spaces/${spaceId}`, {
+            const response = await fetch(`https://spacesfront.onrender.com/spaces/${spaceId}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ availability }),
@@ -189,7 +189,7 @@ export const SpaceProvider = ({ children }) => {
     const createBooking = async (spaceId, bookingData) => {
         const toastId = toast.loading("Creating booking...");
         try {
-            const response = await fetch("http://127.0.0.1:5000/bookings", {
+            const response = await fetch("https://spacesfront.onrender.com/bookings", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -236,7 +236,7 @@ export const SpaceProvider = ({ children }) => {
     
             console.log("Sending payload:", payload); // Log the payload
     
-            const response = await fetch("http://127.0.0.1:5000/process-payment", {
+            const response = await fetch("https://spacesfront.onrender.com/process-payment", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),

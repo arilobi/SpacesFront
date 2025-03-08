@@ -26,7 +26,7 @@ export default function ResetPasswordForm() {
         }
 
         try {
-            const response = await fetch("http://127.0.0.1:5000/reset_password", {
+            const response = await fetch("https://spacesfront.onrender.com/reset_password", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ reset_token: resetToken, new_password: newPassword }),

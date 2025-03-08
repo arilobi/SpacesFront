@@ -6,7 +6,6 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../src/space.css";
 
-// ksh 
 const Spaces = () => {
     const {
         spaces,
@@ -48,7 +47,7 @@ const Spaces = () => {
 
     // Open booking modal only if the space is available
     const openBookingModal = (space) => {
-        if (space.availability === "1" || space.availability === true) {
+        if (space.availability === "true") {
             setSelectedSpace(space);
             setIsBookingModalOpen(true);
         } else {
@@ -138,11 +137,11 @@ const Spaces = () => {
             let updatesNeeded = false;
 
             const updatedSpaces = spaces.map((space) => {
-                if (space.availability === "0" || space.availability === false) {
+                if (space.availability === "false") {
                     const booking = space.bookings?.find((b) => new Date(b.end_time) > now);
                     if (!booking) {
                         updatesNeeded = true;
-                        return { ...space, availability: true };
+                        return { ...space, availability: "true" };
                     }
                 }
                 return space;
@@ -171,8 +170,8 @@ const Spaces = () => {
                 {spaces.map((space) => (
                     <div
                         key={space.id}
-                        className={`card ksh {space.availability === "1" || space.availability === true ? "cursor-pointer" : "cursor-not-allowed"}`}
-                        onClick={() => (space.availability === "1" || space.availability === true) && openBookingModal(space)}
+                        className={`card ksh ${space.availability === "true" ? "cursor-pointer" : "cursor-not-allowed"}`}
+                        onClick={() => space.availability === "true" && openBookingModal(space)}
                     >
                         <img
                             src={space.images || "https://source.unsplash.com/400x300/?office,workspace"}
@@ -183,14 +182,14 @@ const Spaces = () => {
                             <h3 className="card-title">{space.name || "Unnamed Space"}</h3>
                             <p><strong>Location:</strong> {space.location || "Unknown"}</p>
                             <p><strong>Price per Day:</strong> ksh {space.price_per_day || 0}</p>
-                            <p className={`text-ksh {space.availability === "1" || space.availability === true ? "success" : "error"}`}>
-                                <strong>Availability:</strong> {space.availability === "1" || space.availability === true ? "Available" : "Booked"}
+                            <p className={`text-ksh ${space.availability === "true" ? "success" : "error"}`}>
+                                <strong>Availability:</strong> {space.availability === "true" ? "Available" : "Booked"}
                             </p>
                         </div>
                     </div>
                 ))}
             </div>
-{/* ksh */}
+
             {/* Booking Modal */}
             {isBookingModalOpen && selectedSpace && (
                 <div className="modal-overlay">
