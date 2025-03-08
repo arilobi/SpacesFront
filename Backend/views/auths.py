@@ -1,5 +1,5 @@
-from flask import jsonify, request, Blueprint, current_app  # ✅ Import current_app
-from models import db, User, TokenBlockList  # ✅ Correct import from models
+from flask import jsonify, request, Blueprint, current_app  
+from models import db, User, TokenBlockList  
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime, timedelta, timezone
 from flask_jwt_extended import (
@@ -7,8 +7,8 @@ from flask_jwt_extended import (
 )
 import re
 from flask_mail import Message
-from app import mail  # ✅ Ensure Flask-Mail is initialized correctly
-from app import limiter  # ✅ Import limiter from app.py (Avoid NameError)
+from app import mail  #  Ensure Flask-Mail is initialized correctly
+from app import limiter  # Import limiter from app.py (Avoid NameError)
 
 auth_bp = Blueprint("auth_bp", __name__)
 
@@ -38,7 +38,7 @@ def googlelogin():
         }
     }), 200
 
-# ✅ LOGIN ROUTE
+#  LOGIN ROUTE
 @auth_bp.route("/login", methods=["POST"])
 def login():
     """Authenticate user and return JWT token."""
@@ -68,7 +68,7 @@ def login():
     }), 200
 
 
-# ✅ GET CURRENT USER
+#  GET CURRENT USER
 @auth_bp.route("/current_user", methods=["GET"])
 @jwt_required()
 def current_user():
@@ -87,7 +87,7 @@ def current_user():
     }), 200
 
 
-# ✅ LOGOUT ROUTE
+#  LOGOUT ROUTE
 @auth_bp.route("/logout", methods=["DELETE"])
 @jwt_required()
 def logout():
@@ -98,7 +98,7 @@ def logout():
     return jsonify({"success": "Logged out successfully"}), 200
 
 
-# ✅ REGISTER NEW USER
+#  REGISTER NEW USER
 @auth_bp.route("/users", methods=["POST"])
 def register_user():
     """Registers a new user."""
@@ -135,7 +135,7 @@ def register_user():
     }), 201
 
 
-# ✅ REQUEST PASSWORD RESET
+#  REQUEST PASSWORD RESET
 @auth_bp.route("/request_password_reset", methods=["POST"])
 def request_password_reset():
     """Generate a new short password reset token and email it to the user."""
@@ -149,15 +149,15 @@ def request_password_reset():
     if not user:
         return jsonify({"error": "No user found with this email"}), 404
 
-    # ✅ Always generate a new reset token
+    # Always generate a new reset token
     user.generate_reset_token()
     db.session.commit()
 
     try:
         msg = Message(
             subject="Password Reset Request",
-            sender=current_app.config["MAIL_DEFAULT_SENDER"],  # ✅ Automatic sender
-            recipients=[user.email],  # ✅ The user receives the email
+            sender=current_app.config["MAIL_DEFAULT_SENDER"],  #  Automatic sender
+            recipients=[user.email],  #  The user receives the email
         )
         msg.body = f"""
         Hi {user.name},
@@ -172,17 +172,17 @@ def request_password_reset():
         YourApp Team
         """
 
-        from app import mail  # ✅ Import mail inside function to avoid circular imports
+        from app import mail  #  Import mail inside function to avoid circular imports
         mail.send(msg)
         return jsonify({"msg": "A new password reset email has been sent."}), 200
     except Exception as e:
-        print(f"❌ Email sending error: {e}")  # ✅ Debugging
+        print(f"❌ Email sending error: {e}")  #  Debugging
         return jsonify({"error": "Failed to send email", "details": str(e)}), 500
 
 
-# ✅ RESET PASSWORD (With Token)
+#  RESET PASSWORD (With Token)
 @auth_bp.route("/reset_password", methods=["POST"])
-@limiter.limit("3 per minute")  # ✅ Prevent brute force attacks
+@limiter.limit("3 per minute")  #  Prevent brute force attacks
 def reset_password():
     """Reset the user's password using the short reset token."""
     
@@ -197,15 +197,15 @@ def reset_password():
     if not user:
         return jsonify({"error": "Invalid or expired reset token"}), 401
 
-    # ✅ Validate password strength
+    # Validate password strength
     if not re.match(r"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$", new_password):
         return jsonify({"error": "Password must be at least 6 characters long, "
                                  "contain one uppercase letter, one number, and one special character (@$!%*?&)."}), 400
 
-    # ✅ Hash the new password
+    #  Hash the new password
     user.password = generate_password_hash(new_password, method="pbkdf2:sha256")
     
-    # ✅ Clear the reset token after successful reset
+    # Clear the reset token after successful reset
     user.reset_token = None
 
     db.session.commit()
